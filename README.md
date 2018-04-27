@@ -2,7 +2,5 @@
 This crate provides bindings to libvips.
 
 ## Requirements
-This crate finds `libvips` with `pkg-config`.
-
-## TODO
-- Stop using bindgen at build time -> remove clang dependency
+This crate finds vips with `pkg-config`.
+You can test with `pkg-config --cflags vips`.

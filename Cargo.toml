@@ -1,6 +1,6 @@
 [package]
 name = "vips-sys"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["elbaro <elbaro@github>"]
 description = "This crate provides bindings to libvips."
 keywords = ["vips", "image", "libvips"]
@@ -11,7 +11,6 @@ categories = ["multimedia::images", "external-ffi-bindings"]
 license = "MIT"
 
 [build-dependencies]
-bindgen = "0.36.0"
 pkg-config = "0.3.9"
 
 [dependencies]
