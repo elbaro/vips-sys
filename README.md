@@ -4,6 +4,8 @@
 
 This crate provides bindings to libvips.
 
+[Documentation](https://elbaro.github.io/vips-sys/vips_sys/)
+
 ## Requirements
 This crate finds vips with `pkg-config`.
 You can test with `pkg-config --cflags vips`.
