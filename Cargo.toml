@@ -1,6 +1,6 @@
 [package]
 name = "vips-sys"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["elbaro <elbaro@github>"]
 description = "This crate provides bindings to libvips."
 keywords = ["vips", "image", "libvips"]
