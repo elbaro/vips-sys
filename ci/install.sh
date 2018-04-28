@@ -3,7 +3,7 @@ set -ex
 main() {
     local target=
     if [ $TRAVIS_OS_NAME = linux ]; then
-        apt-get install -y libvips-dev
+        sudo apt-get install -y libvips-dev
 
         target=x86_64-unknown-linux-musl
         sort=sort
