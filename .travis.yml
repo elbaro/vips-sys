@@ -4,7 +4,7 @@
 dist: trusty
 language: rust
 services: docker
-sudo: required
+sudo: true
 
 # TODO Rust builds on stable by default, this can be
 # overridden on a case by case basis down below.
@@ -92,20 +92,17 @@ install:
 
 script:
   - bash ci/script.sh
-  - [ $TRAVIS_BRANCH = master ] &&
-    [ $TRAVIS_PULL_REQUEST = false ] &&
-    cargo doc &&
-    echo "<meta http-equiv=refresh content=0;url=`echo $TRAVIS_REPO_SLUG | cut -d '/' -f 2`/index.html>" > target/doc/index.html
+  - bash ci/build_doc.sh
 
 
 after_script: set +e
 
 deploy:
   provider: pages
-  skip-cleanup: true
-  github-token: wqV8Y24Ht7aFYMiiVtb3IkbDq9V6NuqR2EbRSW9FfbsQKxEhi5cXXUFnGKOHcBw5ttQaek8C0ny9A0GeWRnQXYuqldY8lJCYN2Xr+bZdLMWsDhVZK1vamVO0cLND1MDDbNnkZ1VVcJ273ILM/9W0Tejyps10FZXf/2sZEK1rS/K97Dh2xxqstPibc/sXc92E0WBmEPio5SDZeQ3RDKQCmtt8wMGZ/KzxqpsH0rEe/k9isIuvqNzcQHFHHi1epiLnJAFyMTC4XAHRST52i1Xe+AYaQSnLpxtHG00OyHYsho9iA7h2ur3EgS4YzfwhCGgdjQ6UYdcbWq293I/r1l7Pl1dM/YeiDq2T6t0cFLBD86VAeurto1vRM0nX+EbLWZE4Ptx63LlnWa5lRMc6Y7PSm9TczuCzUWUP8pB5YBownQ2Tj8P5mJiGr92Kbbe9cvEdCrAiM1bN3q8l0rE1UD+wOiD8OVAHL329+gPRAFd+k+Ei5/Yeszj52u1KEStZlrq06eGBu8iaxjNoMVRhuP6ZgsbTJwh2Dnf3rh41fRsZyAwH9Md5Y6ylnWmWT7vsPyjRX6n7FrR9//QKmW8pguE7beBi0zbGIP4gPmLFW0f9eNDocbmoGjCS0TvF33NuD/aaYKXc6NSCS7Dwy7dUt2eN69mGVYk99VvcBL1Ell5EqVA=
-  keep-history: true
-  local-dir: target/doc
+  skip_cleanup: true
+  github_token: wqV8Y24Ht7aFYMiiVtb3IkbDq9V6NuqR2EbRSW9FfbsQKxEhi5cXXUFnGKOHcBw5ttQaek8C0ny9A0GeWRnQXYuqldY8lJCYN2Xr+bZdLMWsDhVZK1vamVO0cLND1MDDbNnkZ1VVcJ273ILM/9W0Tejyps10FZXf/2sZEK1rS/K97Dh2xxqstPibc/sXc92E0WBmEPio5SDZeQ3RDKQCmtt8wMGZ/KzxqpsH0rEe/k9isIuvqNzcQHFHHi1epiLnJAFyMTC4XAHRST52i1Xe+AYaQSnLpxtHG00OyHYsho9iA7h2ur3EgS4YzfwhCGgdjQ6UYdcbWq293I/r1l7Pl1dM/YeiDq2T6t0cFLBD86VAeurto1vRM0nX+EbLWZE4Ptx63LlnWa5lRMc6Y7PSm9TczuCzUWUP8pB5YBownQ2Tj8P5mJiGr92Kbbe9cvEdCrAiM1bN3q8l0rE1UD+wOiD8OVAHL329+gPRAFd+k+Ei5/Yeszj52u1KEStZlrq06eGBu8iaxjNoMVRhuP6ZgsbTJwh2Dnf3rh41fRsZyAwH9Md5Y6ylnWmWT7vsPyjRX6n7FrR9//QKmW8pguE7beBi0zbGIP4gPmLFW0f9eNDocbmoGjCS0TvF33NuD/aaYKXc6NSCS7Dwy7dUt2eN69mGVYk99VvcBL1Ell5EqVA=
+  keep_history: true
+  local_dir: target/doc
   on:
     branch: master
 
