@@ -1,0 +1,125 @@
+# Based on the "trust" template v0.1.2
+# https://github.com/japaric/trust/tree/v0.1.2
+
+dist: trusty
+language: rust
+services: docker
+sudo: required
+
+# TODO Rust builds on stable by default, this can be
+# overridden on a case by case basis down below.
+
+env:
+  global:
+    - CRATE_NAME=vips-sys
+
+matrix:
+  # TODO These are all the build jobs. Adjust as necessary. Comment out what you
+  # don't need
+  include:
+    # Android
+    # - env: TARGET=aarch64-linux-android DISABLE_TESTS=1
+    # - env: TARGET=arm-linux-androideabi DISABLE_TESTS=1
+    # - env: TARGET=armv7-linux-androideabi DISABLE_TESTS=1
+    # - env: TARGET=i686-linux-android DISABLE_TESTS=1
+    # - env: TARGET=x86_64-linux-android DISABLE_TESTS=1
+
+    # iOS
+    # - env: TARGET=aarch64-apple-ios DISABLE_TESTS=1
+    #   os: osx
+    # - env: TARGET=armv7-apple-ios DISABLE_TESTS=1
+    #   os: osx
+    # - env: TARGET=armv7s-apple-ios DISABLE_TESTS=1
+    #   os: osx
+    # - env: TARGET=i386-apple-ios DISABLE_TESTS=1
+    #   os: osx
+    # - env: TARGET=x86_64-apple-ios DISABLE_TESTS=1
+    #   os: osx
+
+    # Linux
+    # - env: TARGET=aarch64-unknown-linux-gnu
+    # - env: TARGET=arm-unknown-linux-gnueabi
+    # - env: TARGET=armv7-unknown-linux-gnueabihf
+    # - env: TARGET=i686-unknown-linux-gnu
+    # - env: TARGET=i686-unknown-linux-musl
+    # - env: TARGET=mips-unknown-linux-gnu
+    # - env: TARGET=mips64-unknown-linux-gnuabi64
+    # - env: TARGET=mips64el-unknown-linux-gnuabi64
+    # - env: TARGET=mipsel-unknown-linux-gnu
+    # - env: TARGET=powerpc-unknown-linux-gnu
+    # - env: TARGET=powerpc64-unknown-linux-gnu
+    # - env: TARGET=powerpc64le-unknown-linux-gnu
+    # - env: TARGET=s390x-unknown-linux-gnu DISABLE_TESTS=1
+    - env: TARGET=x86_64-unknown-linux-gnu
+    # - env: TARGET=x86_64-unknown-linux-musl
+
+    # OSX
+    # - env: TARGET=i686-apple-darwin
+    #   os: osx
+    # - env: TARGET=x86_64-apple-darwin
+      # os: osx
+
+    # *BSD
+    # - env: TARGET=i686-unknown-freebsd DISABLE_TESTS=1
+    # - env: TARGET=x86_64-unknown-freebsd DISABLE_TESTS=1
+    # - env: TARGET=x86_64-unknown-netbsd DISABLE_TESTS=1
+
+    # Windows
+    # - env: TARGET=x86_64-pc-windows-gnu
+
+    # Bare metal
+    # These targets don't support std and as such are likely not suitable for
+    # most crates.
+    # - env: TARGET=thumbv6m-none-eabi
+    # - env: TARGET=thumbv7em-none-eabi
+    # - env: TARGET=thumbv7em-none-eabihf
+    # - env: TARGET=thumbv7m-none-eabi
+
+    # Testing other channels
+    - env: TARGET=x86_64-unknown-linux-gnu
+      rust: nightly
+    # - env: TARGET=x86_64-apple-darwin
+    #   os: osx
+    #   rust: nightly
+
+before_install:
+  - set -e
+  - rustup self update
+
+install:
+  - sh ci/install.sh
+  - source ~/.cargo/env || true
+
+script:
+  - bash ci/script.sh
+  - [ $TRAVIS_BRANCH = master ] &&
+    [ $TRAVIS_PULL_REQUEST = false ] &&
+    cargo doc &&
+    echo "<meta http-equiv=refresh content=0;url=`echo $TRAVIS_REPO_SLUG | cut -d '/' -f 2`/index.html>" > target/doc/index.html
+
+
+after_script: set +e
+
+deploy:
+  provider: pages
+  skip-cleanup: true
+  github-token: wqV8Y24Ht7aFYMiiVtb3IkbDq9V6NuqR2EbRSW9FfbsQKxEhi5cXXUFnGKOHcBw5ttQaek8C0ny9A0GeWRnQXYuqldY8lJCYN2Xr+bZdLMWsDhVZK1vamVO0cLND1MDDbNnkZ1VVcJ273ILM/9W0Tejyps10FZXf/2sZEK1rS/K97Dh2xxqstPibc/sXc92E0WBmEPio5SDZeQ3RDKQCmtt8wMGZ/KzxqpsH0rEe/k9isIuvqNzcQHFHHi1epiLnJAFyMTC4XAHRST52i1Xe+AYaQSnLpxtHG00OyHYsho9iA7h2ur3EgS4YzfwhCGgdjQ6UYdcbWq293I/r1l7Pl1dM/YeiDq2T6t0cFLBD86VAeurto1vRM0nX+EbLWZE4Ptx63LlnWa5lRMc6Y7PSm9TczuCzUWUP8pB5YBownQ2Tj8P5mJiGr92Kbbe9cvEdCrAiM1bN3q8l0rE1UD+wOiD8OVAHL329+gPRAFd+k+Ei5/Yeszj52u1KEStZlrq06eGBu8iaxjNoMVRhuP6ZgsbTJwh2Dnf3rh41fRsZyAwH9Md5Y6ylnWmWT7vsPyjRX6n7FrR9//QKmW8pguE7beBi0zbGIP4gPmLFW0f9eNDocbmoGjCS0TvF33NuD/aaYKXc6NSCS7Dwy7dUt2eN69mGVYk99VvcBL1Ell5EqVA=
+  keep-history: true
+  local-dir: target/doc
+  on:
+    branch: master
+
+cache: cargo
+before_cache:
+  # Travis can't cache files that are not readable by "others"
+  - chmod -R a+r $HOME/.cargo
+
+branches:
+  only:
+    # release tags
+    - /^v\d+\.\d+\.\d+.*$/
+    - master
+
+notifications:
+  email:
+    on_success: never

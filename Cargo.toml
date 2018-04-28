@@ -11,6 +11,6 @@ categories = ["multimedia::images", "external-ffi-bindings"]
 license = "MIT"
 
 [build-dependencies]
-pkg-config = "0.3.9"
+pkg-config = "0.3.11"
 
 [dependencies]
