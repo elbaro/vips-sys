@@ -1,20 +1,13 @@
-# Based on the "trust" template v0.1.2
-# https://github.com/japaric/trust/tree/v0.1.2
-
-dist: trusty
 language: rust
-services: docker
-sudo: true
-
-env:
-  global:
-    - CRATE_NAME=vips-sys
+dist: xenial
 
 matrix:
   include:
-    - env: TARGET=x86_64-unknown-linux-gnu
-    - env: TARGET=x86_64-unknown-linux-gnu
+    - os: linux
+      env: IS_MAIN_BUILD=1
+    - os: linux
       rust: nightly
+    - os: osx
 
 addons:
   apt:
@@ -26,11 +19,16 @@ before_install:
   - rustup self update
 
 install:
-  - source ~/.cargo/env || true
+  - source ~/.cargo/env
 
 script:
-  - bash ci/script.sh
-  - cargo doc && echo "<meta http-equiv=refresh content=0;url=`echo vips_sys | cut -d '/' -f 2`/index.html>" > target/doc/index.html
+  - cargo clean
+  - cargo build
+  - cargo test
+  - if [[ "$IS_MAIN_BUILD" == 1 ]]; then
+      cargo doc && echo "<meta http-equiv=refresh content=0;url=`echo vips_sys | cut -d '/' -f 2`/index.html>" > target/doc/index.html
+    fi
+
 
 after_script: set +e
 
@@ -44,15 +42,18 @@ deploy:
     branch: master
 
 cache: cargo
-before_cache:
-  # Travis can't cache files that are not readable by "others"
-  - chmod -R a+r $HOME/.cargo
+before_cache: |
+  chmod -R a+r $HOME/.cargo
+  if [[ "$IS_MAIN_BUILD" == 1 ]]; then
+    RUSTFLAGS="--cfg procmacro2_semver_exempt" cargo install cargo-tarpaulin -f
+  fi
 
-branches:
-  only:
-    # release tags
-    - /^v\d+\.\d+\.\d+.*$/
-    - master
+
+after_success: |
+  if [[ "$IS_MAIN_BUILD" == 1 ]]; then
+    taskset -c 0 cargo tarpaulin --out Xml  # limit parallelism to 1, tarpaulin #190
+    bash <(curl -s https://codecov.io/bash)
+  fi
 
 notifications:
   email:
