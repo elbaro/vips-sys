@@ -2,15 +2,23 @@
 name = "vips-sys"
 version = "0.1.2"
 authors = ["elbaro <elbaro@github>"]
-description = "This crate provides bindings to libvips."
-keywords = ["vips", "image", "libvips"]
+edition = "2018"
+description = "libvips bindings for Rust"
 documentation = "https://elbaro.github.io/vips-sys/vips_sys/"
 repository = "https://github.com/elbaro/vips-sys"
 readme = "README.md"
+keywords = ["vips", "image", "libvips"]
 categories = ["multimedia::images", "external-ffi-bindings"]
 license = "MIT"
+links = "vips"
 
 [build-dependencies]
 pkg-config = "0.3.11"
+bindgen = "0.49.0"
+failure = "0.1.5"
 
 [dependencies]
+
+[dev-dependencies]
+
+# ctest = "0.2.13"
