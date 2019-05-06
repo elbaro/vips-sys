@@ -45,21 +45,19 @@ fn run(mut cmd: Command) -> Result<Vec<String>, Error> {
 
 fn generate_bindings_rs() {
 	let bindings = {
-
 		let mut cmd = Command::new("pkg-config");
 		cmd.args(&["--cflags", "vips"]);
 		let flags = run(cmd).expect("Couldn't run pkg-config"); // include_dir flags required for vips.h
-
 
 		let mut builder = bindgen::Builder::default()
 			.header("wrapper.h")
 			.rustified_enum(".*")
 			.blacklist_type("max_align_t")
-			.blacklist_type("FP_NAN")
-			.blacklist_type("FP_INFINITE")
-			.blacklist_type("FP_ZERO")
-			.blacklist_type("FP_SUBNORMAL")
-			.blacklist_type("FP_NORMAL")
+			.blacklist_item("FP_NAN")
+			.blacklist_item("FP_INFINITE")
+			.blacklist_item("FP_ZERO")
+			.blacklist_item("FP_SUBNORMAL")
+			.blacklist_item("FP_NORMAL")
 			;
 
 		for flag in flags.into_iter() {

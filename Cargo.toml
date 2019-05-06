@@ -15,6 +15,7 @@ links = "vips"
 [features]
 static = []
 dynamic = []
+vips_8_74 = []
 
 [build-dependencies]
 pkg-config = "0.3.11"
