@@ -30,7 +30,7 @@ install:
 script:
   - cargo clean
   - RUSTFLAGS=-Awarnings cargo build
-  - cargo test
+  - RUSTFLAGS=-Awarnings cargo test
   - if [[ "$IS_MAIN_BUILD" == 1 ]]; then
       cargo doc && echo "<meta http-equiv=refresh content=0;url=`echo vips_sys | cut -d '/' -f 2`/index.html>" > target/doc/index.html
     fi
