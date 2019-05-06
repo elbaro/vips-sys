@@ -31,9 +31,7 @@ script:
   - cargo clean
   - RUSTFLAGS=-Awarnings cargo build
   - RUSTFLAGS=-Awarnings cargo test
-  - if [[ "$IS_MAIN_BUILD" == 1 ]]; then
-      cargo doc && echo "<meta http-equiv=refresh content=0;url=`echo vips_sys | cut -d '/' -f 2`/index.html>" > target/doc/index.html
-    fi
+  - [[ -z "${IS_MAIN_BUILD}" ]] && cargo doc && echo "<meta http-equiv=refresh content=0;url=`echo vips_sys | cut -d '/' -f 2`/index.html>" > target/doc/index.html
 
 
 after_script: set +e
@@ -52,13 +50,11 @@ deploy:
 cache: cargo
 before_cache: |
   chmod -R a+r $HOME/.cargo
-  if [[ "$IS_MAIN_BUILD" == 1 ]]; then
-    RUSTFLAGS="--cfg procmacro2_semver_exempt" cargo install cargo-tarpaulin -f
-  fi
+  [[ -z "${IS_MAIN_BUILD}" ]] && RUSTFLAGS="--cfg procmacro2_semver_exempt" cargo install cargo-tarpaulin -f
 
 
 after_success: |
-  if [[ "$IS_MAIN_BUILD" == 1 ]]; then
+  if [[ -z "${IS_MAIN_BUILD}" ]]; then
     taskset -c 0 cargo tarpaulin --out Xml  # limit parallelism to 1, tarpaulin #190
     bash <(curl -s https://codecov.io/bash)
   fi
