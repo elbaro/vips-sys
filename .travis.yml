@@ -5,9 +5,15 @@ matrix:
   include:
     - os: linux
       env: IS_MAIN_BUILD=1
+      rust: stable
     - os: linux
       rust: nightly
     - os: osx
+      rust: stable
+  allow_failures:
+    - os: windows
+      rust: stable
+
 
 addons:
   apt:
@@ -40,6 +46,8 @@ deploy:
   local_dir: target/doc
   on:
     branch: master
+    os: linux
+    rust: nightly
 
 cache: cargo
 before_cache: |

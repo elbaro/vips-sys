@@ -79,11 +79,18 @@ fn generate_bindings_rs() {
 
 fn main() {
 	generate_bindings_rs();
-    let mut config = pkg_config::Config::new();
-	if cfg!(target_os="windows") || cfg!(target_os="macos") {
-		// config.statik(true);
+
+	#[cfg(target_env = "msvc")]
+	{
+		vcpkg::find_package("vips").unwrap();
 	}
-	config.atleast_version("8.2")
-	// .statik(true)
-	.probe("vips").unwrap();
+
+	#[cfg(not(target_env = "msvc"))]
+	{
+		let mut config = pkg_config::Config::new();
+		if cfg!(target_os="windows") || cfg!(target_os="macos") {
+			// config.statik(true);
+		}
+		config.atleast_version("8.2").probe("vips").unwrap();
+	}
 }

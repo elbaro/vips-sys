@@ -11,7 +11,7 @@ This crate provides bindings to libvips.
 - libvips >= 8.2 (Ubuntu 16.04 libvips==8.2.2)
 - Linux: `pkg-config --cflags --libs vips` runs successfully
 - Mac:  `pkg-config --cflags --libs vips` runs successfully
-- Windows: not supported yet
+- Windows: `vcpkg` finds vips. not tested.
 
 Defaults to dynamic linking.
 
