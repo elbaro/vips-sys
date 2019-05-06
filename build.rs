@@ -52,7 +52,15 @@ fn generate_bindings_rs() {
 
 
 		let mut builder = bindgen::Builder::default()
-			.header("wrapper.h");
+			.header("wrapper.h")
+			.rustified_enum(".*")
+			.blacklist_type("max_align_t")
+			.blacklist_type("FP_NAN")
+			.blacklist_type("FP_INFINITE")
+			.blacklist_type("FP_ZERO")
+			.blacklist_type("FP_SUBNORMAL")
+			.blacklist_type("FP_NORMAL")
+			;
 
 		for flag in flags.into_iter() {
 			builder = builder.clang_arg(flag);
@@ -73,7 +81,9 @@ fn main() {
 	generate_bindings_rs();
     let mut config = pkg_config::Config::new();
 	if cfg!(target_os="windows") || cfg!(target_os="macos") {
-		config.statik(true);
+		// config.statik(true);
 	}
-	config.probe("vips").unwrap();
+	config.atleast_version("8.2")
+	// .statik(true)
+	.probe("vips").unwrap();
 }

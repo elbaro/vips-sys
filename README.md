@@ -13,5 +13,10 @@ This crate provides bindings to libvips.
 - Mac:  `pkg-config --cflags --libs vips` runs successfully
 - Windows: not supported yet
 
+Defaults to dynamic linking.
+
+## Known issues
+A static build in mac fails for linking [issue](https://github.com/Homebrew/homebrew-core/issues/23772).
+
 ## Feature gates
 - [TODO] static vs dynamic linking
