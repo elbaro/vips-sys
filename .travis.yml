@@ -32,7 +32,7 @@ script:
   - RUSTFLAGS=-Awarnings cargo build
   - RUSTFLAGS=-Awarnings cargo test
   - |
-    [ -n "$IS_MAIN_BUILD" ] && cargo doc && echo "<meta http-equiv=refresh content=0;url=`echo vips_sys | cut -d '/' -f 2`/index.html>" > target/doc/index.html
+    [ -n "$IS_MAIN_BUILD" ] && RUSTFLAGS=-Awarnings cargo doc && echo "<meta http-equiv=refresh content=0;url=`echo vips_sys | cut -d '/' -f 2`/index.html>" > target/doc/index.html
 
 
 after_script: set +e
