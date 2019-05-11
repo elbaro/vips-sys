@@ -26,6 +26,8 @@ before_install:
 
 install:
   - source ~/.cargo/env
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install vips; fi
+
 
 script:
   - cargo clean
