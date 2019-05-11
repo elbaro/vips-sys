@@ -55,7 +55,7 @@ cache: cargo
 before_cache: |
   chmod -R a+r $HOME/.cargo
   # colon make sure this evalues to true
-  [ -n "${IS_MAIN_BUILD}" ] && RUSTFLAGS="--cfg procmacro2_semver_exempt" cargo install cargo-tarpaulin -f || :
+  [ -n "${IS_MAIN_BUILD}" ] && RUSTFLAGS="--cfg procmacro2_semver_exempt" cargo install --quiet cargo-tarpaulin -f || :
 
 
 after_success: |
