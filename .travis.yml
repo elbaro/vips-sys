@@ -28,7 +28,7 @@ install:
   - source ~/.cargo/env
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install vips > /dev/null; fi
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install pkg-config > /dev/null; fi
-  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then export PATH="/usr/local/bin:$PATH" fi
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then export PATH="/usr/local/bin:$PATH"; fi
 
 script:
   - cargo clean
