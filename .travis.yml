@@ -26,8 +26,8 @@ before_install:
 
 install:
   - source ~/.cargo/env
-  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install vips; fi
-  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install pkg-config fi
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install vips > /dev/null; fi
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install pkg-config > /dev/null; fi
 
 
 script:
